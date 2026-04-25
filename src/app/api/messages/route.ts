@@ -36,6 +36,18 @@ export async function POST(request: NextRequest) {
             [name, email, subject, message]
         );
 
+        // Fetch admin email from database
+        const [adminRows] = await pool.execute<RowDataPacket[]>("SELECT email FROM admins LIMIT 1");
+        const adminEmail = adminRows.length > 0 ? adminRows[0].email : process.env.SMTP_USER;
+
+        // Send email notification to admin asynchronously (don't await to avoid blocking the response)
+        const { sendContactNotificationEmail } = await import("@/lib/mail");
+        if (adminEmail) {
+            sendContactNotificationEmail(adminEmail, name, email, subject, message).catch(err => {
+                console.error("Failed to send contact notification email:", err);
+            });
+        }
+
         return NextResponse.json({ success: true, message: "Pesan berhasil dikirim." }, { status: 201 });
     } catch (error) {
         console.error("POST /api/messages error:", error);

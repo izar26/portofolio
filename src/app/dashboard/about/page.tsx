@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 interface AboutData {
     description_1: string;
     image_url: string;
+    cv_url: string;
     location_badge: string;
     full_name: string;
     role: string;
@@ -29,6 +30,7 @@ export default function AboutDashboard() {
     const [isSaving, setIsSaving] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [selectedCvFile, setSelectedCvFile] = useState<File | null>(null);
 
     useEffect(() => {
         fetch("/api/about")
@@ -61,6 +63,12 @@ export default function AboutDashboard() {
         }
     };
 
+    const handleCvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setSelectedCvFile(e.target.files[0]);
+        }
+    };
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         if (!data) return;
@@ -68,6 +76,7 @@ export default function AboutDashboard() {
         setIsSaving(true);
         try {
             let finalImageUrl = data.image_url;
+            let finalCvUrl = data.cv_url;
 
             // 1. Upload image if a new file is selected
             if (selectedFile) {
@@ -86,8 +95,25 @@ export default function AboutDashboard() {
                 }
             }
 
-            // 2. Save all data to DB
-            const payloadToSave = { ...data, image_url: finalImageUrl };
+            // 2. Upload CV if a new file is selected
+            if (selectedCvFile) {
+                const formData = new FormData();
+                formData.append("file", selectedCvFile);
+
+                const uploadRes = await fetch("/api/upload", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                const uploadJson = await uploadRes.json();
+                if (!uploadRes.ok) throw new Error(uploadJson.message || "Gagal mengunggah CV.");
+                if (uploadJson.success) {
+                    finalCvUrl = uploadJson.url;
+                }
+            }
+
+            // 3. Save all data to DB
+            const payloadToSave = { ...data, image_url: finalImageUrl, cv_url: finalCvUrl };
 
             const res = await fetch("/api/about", {
                 method: "PUT",
@@ -230,6 +256,34 @@ export default function AboutDashboard() {
                                 required
                                 className="w-full px-4 py-3 bg-white/50 dark:bg-obsidian-900 border border-zinc-200 dark:border-white/10 rounded-xl text-sm font-body focus:ring-2 focus:ring-emerald-500/40"
                             />
+                        </div>
+
+                        <div className="md:col-span-2 pt-4 border-t border-zinc-200 dark:border-white/10">
+                            <label className="block text-sm font-semibold text-zinc-600 dark:text-zinc-300 mb-2 font-sans flex items-center gap-2">
+                                <LinkIcon size={14} /> Dokumen Curriculum Vitae (CV)
+                            </label>
+                            <div className="flex flex-col sm:flex-row items-center gap-4">
+                                <input
+                                    type="file"
+                                    id="cvFile"
+                                    accept="application/pdf, image/png, image/jpeg, image/webp"
+                                    onChange={handleCvChange}
+                                    className="hidden"
+                                />
+                                <label
+                                    htmlFor="cvFile"
+                                    className="cursor-pointer inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white dark:bg-obsidian-800 border border-zinc-200 dark:border-white/10 text-sm font-semibold text-zinc-700 dark:text-zinc-300 hover:text-emerald-500 transition-colors shadow-sm w-full sm:w-auto"
+                                >
+                                    Pilih File PDF / Gambar...
+                                </label>
+                                <div className="text-sm font-body text-zinc-500 truncate flex-1">
+                                    {selectedCvFile ? selectedCvFile.name : (data.cv_url ? (
+                                        <a href={data.cv_url} target="_blank" rel="noreferrer" className="text-emerald-500 hover:underline">
+                                            Lihat CV Saat Ini
+                                        </a>
+                                    ) : "Belum ada CV yang diunggah")}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </motion.div>

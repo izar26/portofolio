@@ -42,25 +42,27 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Step 1: If no TOTP code provided, request it
-        if (!totpCode) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    requireTOTP: true,
-                    message: "Masukkan kode Google Authenticator.",
-                },
-                { status: 200 }
-            );
-        }
+        // Step 1: If admin has TOTP configured, require and verify it
+        if (admin.totp_secret) {
+            if (!totpCode) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        requireTOTP: true,
+                        message: "Masukkan kode Google Authenticator.",
+                    },
+                    { status: 200 }
+                );
+            }
 
-        // Step 2: Verify TOTP code
-        const isTOTPValid = verifyTOTP(admin.totp_secret, totpCode);
-        if (!isTOTPValid) {
-            return NextResponse.json(
-                { success: false, message: "Kode autentikasi tidak valid atau sudah kadaluarsa." },
-                { status: 401 }
-            );
+            // Step 2: Verify TOTP code
+            const isTOTPValid = verifyTOTP(admin.totp_secret, totpCode);
+            if (!isTOTPValid) {
+                return NextResponse.json(
+                    { success: false, message: "Kode autentikasi tidak valid atau sudah kadaluarsa." },
+                    { status: 401 }
+                );
+            }
         }
 
         // Generate JWT token

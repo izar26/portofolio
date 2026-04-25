@@ -20,9 +20,9 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ success: false, message: "File gambar tidak ditemukan." }, { status: 400 });
         }
 
-        // 3. Validasi tipe file (Hanya izinkan gambar)
-        if (!file.type.startsWith("image/")) {
-            return NextResponse.json({ success: false, message: "File harus berupa gambar." }, { status: 400 });
+        // 3. Validasi tipe file (Izinkan gambar dan PDF)
+        if (!file.type.startsWith("image/") && file.type !== "application/pdf") {
+            return NextResponse.json({ success: false, message: "File harus berupa gambar atau PDF." }, { status: 400 });
         }
 
         // 4. Siapkan path penyimpanan di public/uploads
@@ -52,11 +52,11 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({
             success: true,
             url: publicUrl,
-            message: "Gambar berhasil diunggah."
+            message: "File berhasil diunggah."
         }, { status: 200 });
 
     } catch (error) {
         console.error("POST /api/upload error:", error);
-        return NextResponse.json({ success: false, message: "Gagal mengunggah gambar." }, { status: 500 });
+        return NextResponse.json({ success: false, message: "Gagal mengunggah file." }, { status: 500 });
     }
 }

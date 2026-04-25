@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Lock, Mail, ShieldCheck, Eye, EyeOff, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
     const router = useRouter();
@@ -164,6 +165,11 @@ export default function LoginPage() {
                                         <Eye className="w-4 h-4" />
                                     )}
                                 </button>
+                            </div>
+                            <div className="mt-2 text-right">
+                                <Link href="/forgot-password" className="text-xs text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 font-medium transition-colors">
+                                    Lupa Password?
+                                </Link>
                             </div>
                         </motion.div>
 

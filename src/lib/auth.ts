@@ -2,7 +2,10 @@ import jwt from "jsonwebtoken";
 import * as OTPAuth from "otpauth";
 import type { JWTPayload } from "@/types/types";
 
-const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret-key";
+if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET is not defined in environment variables");
+}
+const JWT_SECRET = process.env.JWT_SECRET;
 
 /**
  * Sign a JWT token with 24-hour expiry

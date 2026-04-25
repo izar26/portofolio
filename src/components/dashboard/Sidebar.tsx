@@ -9,7 +9,8 @@ import {
     Wrench,
     FolderGit2,
     BriefcaseBusiness,
-    Settings
+    Settings,
+    ShieldCheck
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +21,7 @@ const navigation = [
     { name: "Proyek", href: "/dashboard/projects", icon: FolderGit2 },
     { name: "Pengalaman", href: "/dashboard/experience", icon: BriefcaseBusiness },
     { name: "Pengaturan", href: "/dashboard/settings", icon: Settings },
+    { name: "Keamanan", href: "/dashboard/security", icon: ShieldCheck },
 ];
 
 export function Sidebar() {

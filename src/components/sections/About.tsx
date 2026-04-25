@@ -64,7 +64,7 @@ export function About() {
                             transition={{ duration: 0.6, delay: 0.2 }}
                             className="w-full lg:w-1/2 relative"
                         >
-                            <div className="relative aspect-square md:aspect-[4/3] w-full rounded-3xl overflow-hidden border border-zinc-200 dark:border-white/10 shadow-2xl group">
+                            <div className="relative aspect-square md:aspect-[3/4] w-full rounded-3xl overflow-hidden border border-zinc-200 dark:border-white/10 shadow-2xl group">
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
                                 {/* Image Placeholder */}
                                 <img

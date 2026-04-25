@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "node --env-file=.env scripts/seed.mjs && node --env-file=.env scripts/seed-about.mjs && node --env-file=.env scripts/seed-contact.mjs && node --env-file=.env scripts/seed-experience.mjs && node --env-file=.env scripts/seed-projects.mjs && node --env-file=.env scripts/seed-skills.mjs"
   },
   "dependencies": {
     "@types/formidable": "^3.5.0",
@@ -21,7 +22,9 @@
     "mysql2": "^3.19.0",
     "next": "16.1.6",
     "next-themes": "^0.4.6",
+    "nodemailer": "^8.0.5",
     "otpauth": "^9.5.0",
+    "qrcode": "^1.5.4",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-parallax-tilt": "^1.7.319",
@@ -34,6 +37,8 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.0",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

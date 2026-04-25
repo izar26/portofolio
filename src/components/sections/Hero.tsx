@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion, Variants } from "framer-motion";
 import { ArrowRight, Download } from "lucide-react";
 
@@ -24,6 +25,19 @@ const itemVariants: Variants = {
 };
 
 export function Hero() {
+    const [cvUrl, setCvUrl] = useState<string>("/resume.pdf");
+
+    useEffect(() => {
+        fetch("/api/about")
+            .then(res => res.json())
+            .then(json => {
+                if (json.success && json.data?.cv_url) {
+                    setCvUrl(json.data.cv_url);
+                }
+            })
+            .catch(console.error);
+    }, []);
+
     return (
         <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
             {/* Background Elements */}
@@ -82,7 +96,9 @@ export function Hero() {
                         </a>
 
                         <a
-                            href="/resume.pdf"
+                            href={cvUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="group relative inline-flex items-center justify-center overflow-hidden rounded-full font-medium text-sm shadow-xl w-full sm:w-auto"
                         >
                             <span className="relative flex items-center justify-center gap-2 bg-white hover:bg-zinc-50 dark:bg-obsidian-900 border border-zinc-200 dark:border-white/10 dark:hover:bg-obsidian-800 px-8 py-3 rounded-full transition-all duration-300 w-full">

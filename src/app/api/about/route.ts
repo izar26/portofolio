@@ -38,6 +38,7 @@ export async function PUT(request: NextRequest) {
         const {
             description_1,
             image_url,
+            cv_url,
             location_badge,
             full_name,
             role,
@@ -53,13 +54,13 @@ export async function PUT(request: NextRequest) {
 
         await pool.execute(
             `UPDATE about_section SET 
-        description_1 = ?, image_url = ?, location_badge = ?, 
+        description_1 = ?, image_url = ?, cv_url = ?, location_badge = ?, 
         full_name = ?, role = ?, email = ?, location_detail = ?, 
         stats_1_value = ?, stats_1_label = ?, stats_2_value = ?, stats_2_label = ?, 
         stats_3_value = ?, stats_3_label = ? 
       WHERE id = 1`,
             [
-                description_1, image_url, location_badge,
+                description_1, image_url, cv_url, location_badge,
                 full_name, role, email, location_detail,
                 stats_1_value, stats_1_label, stats_2_value, stats_2_label,
                 stats_3_value, stats_3_label
