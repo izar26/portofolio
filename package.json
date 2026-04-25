@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "setup:db": "node scripts/setup.mjs",
     "seed": "node --env-file=.env scripts/seed.mjs && node --env-file=.env scripts/seed-about.mjs && node --env-file=.env scripts/seed-contact.mjs && node --env-file=.env scripts/seed-experience.mjs && node --env-file=.env scripts/seed-projects.mjs && node --env-file=.env scripts/seed-skills.mjs"
   },
   "dependencies": {
